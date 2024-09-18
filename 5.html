@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าเว็บพื้นฐาน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* styles.css */
+
+@font-face {
+    font-family: 'FC Home Regular';
+    src: url('fonts/fc-home-regular.woff2') format('woff2'),
+         url('fonts/fc-home-regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'FC Home Regular', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+    overflow: hidden;
+    transition: opacity 0.5s ease;
+    height: 100%;
+    overflow: auto;
+}
+
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 1s ease 1s;
+}
+
+#welcome-overlay.visible {
+    opacity: 1;
+}
+
+#welcome-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+header {
+    background-color: rgba(4, 25, 255, 0.8);
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+header img {
+    height: 50px;
+    width: auto;
+    animation: rotateImage 4s infinite linear;
+}
+
+/* เพิ่มการหมุนโลโก้ */
+@keyframes rotateImage {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background: rgba(68, 68, 68, 0.8);
+    padding: 10px 0;
+    position: relative;
+    animation: slideInFromTop 2s ease-in-out; /* เพิ่มการเลื่อนเมนูเข้ามาจากด้านบน */
+}
+
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+nav a {
+    color: #ffd700;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+nav a.animated {
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+nav a i {
+    margin-right: 5px;
+}
+
+nav a:hover {
+    background: rgba(12, 2, 52, 0.8);
+    color: #3f6cff;
+    transform: scale(1.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    padding: 20px;
+    background-color: rgba(140, 255, 144, 0.8);
+    margin: 20px auto;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    animation: fadeInContainer 2s ease-in; /* เพิ่มการเลื่อนเข้าของคอนเทนเนอร์ */
+}
+
+@keyframes fadeInContainer {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container img {
+    max-width: 25%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: scale(0.9);
+    animation: fadeInImage 1s forwards;
+    animation-delay: calc(0.5s * var(--i));
+}
+
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.container img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fade-in-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInText 2s forwards;
+}
+
+@keyframes fadeInText {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Floating gears */
+.floating-gear {
+    position: absolute;
+    font-size: 10rem;
+    color: #e72eff;
+    opacity: 0;
+    animation: floatGear 10s infinite;
+}
+
+@keyframes floatGear {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(100px, -1000px) rotate(100deg);
+        opacity: 0;
+    }
+}
+
+        nav {
+    display: flex;
+    justify-content: center;
+    background: rgba(68, 68, 68, 0.8);
+    padding: 10px 0;
+    position: relative; /* ให้สามารถใช้การเคลื่อนไหวแบบ absolute ด้านใน */
+}
+
+nav a {
+    color: #ffd700;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    transform: scale(0.9); /* เริ่มต้นที่ขนาดเล็กกว่า */
+    opacity: 0; /* ซ่อนปุ่มเริ่มต้น */
+    position: relative;
+}
+
+nav a i {
+    margin-right: 5px;
+}
+
+nav a:hover {
+    background: rgba(12, 2, 52, 0.8);
+    color: #3f6cff;
+    transform: scale(1.2); /* ขยายเมนูเมื่อ hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* เพิ่มเงาให้ดูเด่น */
+}
+
+nav a.animated {
+    opacity: 1; /* แสดงปุ่มเมื่อทำอนิเมชั่น */
+    transform: scale(1); /* ขยายปุ่มกลับมาเป็นขนาดปกติ */
+    transition: transform 0.5s ease, opacity 0.5s ease; /* ใช้เวลาในการเปลี่ยนแปลง 0.5 วินาที */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+nav a.bounce-effect:hover {
+    animation: bounce 1s;
+}
+
+        @font-face {
+            font-family: 'FC Home Regular';
+            src: url('fonts/fc-home-regular.woff2') format('woff2'),
+                 url('fonts/fc-home-regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'FC Home Regular', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอเนื่องจากวิดีโอที่ครอบคลุม */
+            transition: opacity 0.5s ease; /* สำหรับการเปลี่ยนหน้าแบบสมูธ */
+            height: 100%;
+            overflow: auto; /* ปรับการเลื่อนให้สามารถทำงานได้ */
+        }
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+        #welcome-overlay.visible {
+            opacity: 1;
+        }
+        #welcome-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        header {
+            background-color: rgba(4, 25, 255, 0.8);
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        header img {
+            height: 50px;
+            width: auto;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background: rgba(68, 68, 68, 0.8);
+            padding: 10px 0;
+        }
+        nav a {
+            color: #ffd700;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        nav a i {
+            margin-right: 5px;
+        }
+        nav a:hover {
+            background: rgba(85, 85, 85, 0.8);
+            color: #3f6cff;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(68, 68, 68, 0.9);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            flex-direction: column;
+            gap: 0;
+        }
+        .dropdown-content a {
+            color: #ffd700;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+            width: 100%;
+        }
+        .dropdown-content a:hover {
+            background: rgba(85, 85, 85, 0.8);
+            color: #3f6cff;
+        }
+        .dropdown:hover .dropdown-content {
+            display: flex;
+        }
+        .container {
+            padding: 20px;
+            background-color: rgba(213, 151, 255, 0.8);
+            margin: 20px auto;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .container img {
+            max-width: 25%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: fadeInImage 1s forwards;
+            animation-delay: calc(0.5s * var(--i));
+        }
+        @keyframes fadeInImage {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .container img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 768px) {
+            body {
+                background-size: contain;
+                background-attachment: scroll;
+            }
+            .container {
+                padding: 10px;
+                margin: 5px;
+            }
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        .fade-in-text {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInText 2s forwards;
+        }
+        @keyframes fadeInText {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Floating gears */
+        .floating-gear {
+            position: absolute;
+            font-size: 10rem;
+            color: #e72eff;
+            opacity: 10;
+            animation: floatGear 10s infinite;
+        }
+        @keyframes floatGear {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            25% {
+                opacity: 10;
+            }
+            100% {
+                transform: translate(100px, -1000px) rotate(100deg);
+                opacity: 0;
+            }
+        }
+        .large-font {
+            font-size: 1.5rem; /* ปรับขนาดฟอนต์ให้ใหญ่ขึ้น */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video Background -->
+    <video id="video-background" autoplay muted loop>
+        <source src="D:\Paramee020\vi\3191572-uhd_3840_2160_25fps.mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Welcome Overlay -->
+    <div id="welcome-overlay">Policy</div>
+
+    <header>
+        <img src="D:/Paramee020/PIC/1.gif" alt="โลโก้">
+        <h1>Thai - Austrian Technical College</h1>
+    </header>
+
+    <nav>
+        <a href="file:///D:/Paramee020/A1/index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="file:///D:/Paramee020/A1/2.html"><i class="fas fa-clock"></i> ประวัติความเป็นมา</a> <!-- ใช้ชื่อไฟล์ใหม่ที่คุณสร้าง -->
+        <a href="file:///D:/Paramee020/A1/3.html"><i class="fas fa-fingerprint"></i> อัตลักษณ์</a>
+        <a href="file:///D:/Paramee020/A1/4.html"><i class="fas fa-lightbulb"></i> ปรัชญา</a>
+        <a href="file:///D:/Paramee020/A1/5.html"><i class="fas fa-cogs"></i> นโยบาย</a>
+        <a href="file:///D:/Paramee020/A1/6.html"><i class="fas fa-users"></i> ทำเนียบ</a>
+        <a href="file:///D:/Paramee020/A1/7.html"><i class="fas fa-pen"></i> ฟอร์ม</a>
+        <a href="file:///D:/Paramee020/A1/8.html"><i class="fas fa-id-card"></i>  resume </a>
+        <div class="dropdown">
+            <a href="#"><i class="fas fa-file-alt"></i> ใบงาน</a>
+            <div class="dropdown-content">
+                <a href="D:\Paramee020\PIC\b1.pdf"><i class="fas fa-file-alt"></i> ใบงาน 1</a>
+                <a href="D:\Paramee020\PIC\b2.png"><i class="fas fa-file-image"></i> ใบงาน 2</a>  
+                <a href="D:\Paramee020\PIC\b3.pdf"><i class="fas fa-file-pdf"></i> ใบงาน 3</a>
+                <a href="D:\Paramee020\PIC\b4.png"><i class="fas fa-file-image"></i> ใบงาน 4</a>
+                <a href="D:\Paramee020\PIC\b5.pdf"><i class="fas fa-file-pdf"></i> ใบงาน 5</a>
+                <a href="D:\Paramee020\PIC\b6.png"><i class="fas fa-file-image"></i> ใบงาน 6</a>
+                <a href="D:\Paramee020\PIC\b7.png"><i class="fas fa-file-image"></i> ใบงาน 7</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" align="left">
+        <article class="large-font">
+            <h2 class="fade-in-text">นโยบายของวิทยาลัย</h2>
+            <h2 align="left" class="fade-in-text">นโยบาย</h2>
+            <p align="left" class="fade-in-text">เพื่อให้การดำเนินงานของวิทยาลัยเทคนิคสัตหีบ สอดคล้องกับนโยบายกรมอาชีวศึกษา และในการดำเนินงานของกองวิทยาลัยเทคนิค วิทยาลัยเทคนิคสัตหีบจึงขอสรุปสาระสำคัญของนโยบาย และแนวทางดำเนินงานดังกล่าว เพื่อใช้เป็นทิศทางในการปฎิบัติงานให้เกิดผลดี ในทางปฏิบัติอย่างจริงจัง</p>
+            <hr size="2" color="#000000">
+            <h2 align="left" class="fade-in-text">ดังนี้</h2>
+            <p align="left" class="fade-in-text">1. การสอนของครู-อาจารย์ ทั้งวิชาสามัญ ทฤษฎี และภาคปฏิบัติ ให้เน้นเรื่องการเข้าสอนตรงเวลา การสอนเต็มเวลา ตรงตามตารางสอน</p>
+            <p align="left" class="fade-in-text">2. การจัดทำสื่อการเรียนการสอนรายวิชาต่างๆ ในรูปแบบของ แผ่นใส สไลด์ วีดีทัศน์ บทเรียนคอมพิวเตอร์ และชุดฝึก เป็นต้น</p>
+            <p align="left" class="fade-in-text">3. การเขียนแผนการสอน หรือโครงการสอน ของทุกรายวิชาในทุกๆ ภาคเรียน</p>
+            <p align="left" class="fade-in-text">4. ครูอาจารย์ประเมินผลตรงตามหลักสูตรและส่งผลการเรียนตรงตามเวลาที่กำหนด</p>
+            <p align="left" class="fade-in-text">5. ปรับปรุง และพัฒนาห้องเรียนและห้องปฏิบัติการวิทยาศาสตร์ให้เพียงพอและทันสมัย</p>
+            <p align="left" class="fade-in-text">6. ปรับปรุง และพัฒนาห้องปฏิบัติการทางภาษา</p>
+            <p align="left" class="fade-in-text">7. ปรับปรุงและพัฒนาห้องปฏิบัติการคอมพิวเตอร์</p>
+            <p align="left" class="fade-in-text">8. ส่งเสริมประดิษฐ์ สิ่งประดิษฐ์ของคนรุ่นใหม่ โดยมุ่งเน้น คุณภาพ ปริมาณ และการมีส่วนร่วมของนักศึกษา</p>
+            <p align="left" class="fade-in-text">9. ส่งเสริมและสนับสนุนการทำโครงงานวิทยาศาสตร์</p>
+            <p align="left" class="fade-in-text">10. การแต่งกาย การตรงต่อเวลา ความรับผิดชอบ และความสามัคคีของนักเรียน นักศึกษา</p>
+            <p align="left" class="fade-in-text">11. จัด และตกแต่งวิทยาลัยให้ สะอาด สวยงาม ร่มรื่น</p>
+            <p align="left" class="fade-in-text">12. จัดที่นั่ง และบริเวณที่พักผ่อน สำหรับนักศึกษา</p>
+            <p align="left" class="fade-in-text">13. ความสะอาดความเป็นระเบียบของห้องเรียน อาคาร โรงฝึกงาน ห้องปฏิบัติการ โรงอาหาร</p>
+            <p align="left" class="fade-in-text">14. ปรับปรุง และพัฒนาการจัดการศึกษาให้มีคุณภาพ</p>
+        </article>
+    </div>
+ 
+       
+   
+
+    <script>
+        function createFloatingGear() {
+            const gear = document.createElement('i');
+            gear.className = 'fas fa-cog floating-gear';
+            gear.style.left = Math.random() * 100 + 'vw';
+            gear.style.top = Math.random() * 100 + 'vh';
+            gear.style.fontSize = Math.random() * 1.5 + 0.5 + 'rem';
+            gear.style.animationDuration = Math.random() * 5 + 5 + 's';
+            document.body.appendChild(gear);
+            
+            setTimeout(() => {
+                gear.remove();
+            }, 10000); // Remove gear after 10 seconds
+        }
+
+        // Create multiple gears
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createFloatingGear, i * 500); // Stagger the appearance of gears
+        }
+
+        // JavaScript สำหรับแสดง Welcome Overlay หลังจากโหลด
+        window.onload = function() {
+            const overlay = document.getElementById('welcome-overlay');
+            setTimeout(() => {
+                overlay.classList.add('visible');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 3000);
+            }, 1000);
+        };
+
+        // JavaScript สำหรับดีเลย์การแสดงข้อความทีละบรรทัด
+        document.addEventListener('DOMContentLoaded', function () {
+            const textElements = document.querySelectorAll('.fade-in-text');
+            textElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.5}s`; // ดีเลย์ 0.5 วินาทีสำหรับแต่ละบรรทัด
+            });
+        });
+
+        // Smooth page transition
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) return; // Skip if it's an anchor link
+
+                e.preventDefault();
+                const targetUrl = this.getAttribute('href');
+                document.body.classList.add('fade-out');
+
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500); // Match the transition duration
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('nav a');
+
+    // ใช้ setTimeout เพื่อให้ปุ่มแต่ละปุ่มแสดงทีละตัว
+    menuItems.forEach((menuItem, index) => {
+        setTimeout(() => {
+            menuItem.classList.add('animated'); // เพิ่มคลาส animated เพื่อแสดงผลเมนู
+        }, 200 * index); // ดีเลย์การแสดงทีละปุ่ม
+    });
+
+    // เพิ่มเอฟเฟกต์ bounce เมื่อ hover
+    menuItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            item.classList.add('bounce-effect');
+        });
+
+        item.addEventListener('mouseleave', () => {
+            item.classList.remove('bounce-effect');
+        });
+    });
+});
+// script.js
+
+window.addEventListener('load', function() {
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    welcomeOverlay.classList.add('visible');
+    setTimeout(() => welcomeOverlay.classList.add('hidden'), 3000);
+
+    // Add animation to nav links
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach((link, index) => {
+        setTimeout(() => {
+            link.classList.add('animated');
+        }, index * 200); // Add delay between each link
+    });
+});
+
+    </script>
+
+</body>
+</html>
